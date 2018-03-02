@@ -11,7 +11,7 @@ var store = new vuex.Store({
   },
   mutations: {
     setResults(state, results){
-      state.results = results
+      state.results = results;
     }
   },
   actions: {
