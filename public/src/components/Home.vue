@@ -7,17 +7,28 @@
         <button type='submit' class="btn btn-large">Search</button>
       </form>
     </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+          <itunes class="itunes"></itunes>
+        </div>
+        <div class="col-md-6">
+          <my-tunes class="my-tunes"></my-tunes>
+        </div>
+      </div>
+    </div>
     <!-- YOU WILL PROBABLY END UP WITH SOMETHING LIKE THIS -->
-    <itunes class="itunes"></itunes>
-    <my-tunes class="my-tunes"></my-tunes>
   </div>
 </template>
 
 <script>
+  import itunes from './Itunes.vue'
   import MyTunes from './MyTunes.vue'
-  import Itunes from './Itunes.vue'
   export default {
     name: 'home',
+    mounted(){
+      this.$store.dispatch('getMyTunes')
+    },
     data() {
       return {
         artist: ''
@@ -28,8 +39,11 @@
         this.$store.dispatch('getMusicByArtist', this.artist)
       }
     },
+    computed: {
+
+    },
     components: {
-      Itunes,
+      itunes,
       MyTunes
     }
   }
@@ -38,16 +52,10 @@
 
 <style>
   .my-tunes {
-    display: inline-block;
-    min-height: 500px;
-    min-width: 50%;
     background: lightblue;
   }
 
   .itunes {
-    display: inline-block;
     background: gray;
-    min-height: 500px;
-    min-width: 45%;
   }
 </style>

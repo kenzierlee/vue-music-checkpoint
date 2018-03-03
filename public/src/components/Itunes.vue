@@ -3,12 +3,11 @@
         <h1>Search Results</h1>
         <div class="search-results">
             <div v-for='result in results'>
-                <div class="flexor mar-bottom border-grey">
+                <div class="flexor border-grey">
                     <div class="mar-right">
-                        <img v-bind:src="result.artworkUrl60">
+                        <img v-bind:src="result.artworkUrl100">
                         <div class="margin-top">
-                            <button @click='addTrack(result)' class='btn btn-lg'>
-                                <i class="fas fa-1x fa-arrow-circle-up"></i>Add To Playlist</button>
+                            <button @click='addTrack(result)' class='btn btn-lg'>Add To Playlist</button>
                         </div>
                     </div>
                     <div class="result-info">
@@ -18,6 +17,7 @@
                             <b>Album: </b> {{result.collectionName}}</h5>
                         <h5>
                             <b>Title: </b>{{result.trackName}} ${{result.trackPrice}}</h5>
+                            <audio controls><source :src="result.previewURL"></audio>
                     </div>
                 </div>
             </div>
@@ -26,18 +26,22 @@
 </template>
 
 <script>
+    import myTunes from './MyTunes'
     export default {
         name: 'iTunes',
         props: ['artist'],
-        methods: {
-           addTrack(result){
-               this.$store.dispatch('addToMyTunes', result)
-           }
-        },
         computed: {
             results() {
                 return this.$store.state.results
             }
+        },
+        methods: {
+            addTrack(result) {
+                this.$store.dispatch('addToMyTunes', result)
+            }
+        },
+        components: {
+            myTunes
         }
     }
 
@@ -46,15 +50,32 @@
 <style>
     .flexor {
         display: flex;
-        margin-bottom: .3rem;
-        padding: .5rem;
-        border-radius: 10px;
+        margin-bottom: 1rem;
         justify-content: space-between
     }
 
     .result-info {
         align-self: center;
         padding: .5rem;
+        margin-bottom: 2.5rem;
+        margin-left: 2rem;
         width: 100%;
+    }
+
+    img {
+        margin-bottom: .5rem;
+        margin-left: 2.75rem;
+    }
+
+    button {
+        margin-left: 1rem;
+    }
+
+    h1 {
+        margin-bottom: 3rem;
+    }
+
+    .mar-right {
+        margin-right: 1rem;
     }
 </style>

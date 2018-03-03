@@ -1,45 +1,119 @@
-import vue from 'vue'
-import vuex from 'vuex'
-import $ from 'jquery'
+import vue from 'vue';
+import vuex from 'vuex';
+import $ from 'jquery';
+import axios from 'axios';
+import router from '../router';
 
-vue.use(vuex)
+vue.use(vuex);
+
+let music = axios.create({
+  baseURL: '//bcw-getter.herokuapp.com/?url=https://itunes.apple.com/search?term=',
+  timeout: 3000
+});
+
+let api = axios.create({
+  baseURL: '//localhost:3000/api/',
+  timeout: 3000,
+  withCredentials: true
+});
 
 var store = new vuex.Store({
   state: {
     myTunes: [],
-    results: []
+    results: [],
+    user: {}
   },
   mutations: {
-    setResults(state, results){
+    setResults(state, results) {
       state.results = results;
+    },
+    setMyTunes(state, payload) {
+      state.myTunes.unshift(payload)
+    },
+    updateUser(state, payload) {
+      state.user = payload;
+    },
+    updatePlaylist(state, payload) {
+      payload.sort(function (a, b) {
+        return b.like - a.like;
+      })
+      state.myTunes = payload
+    },
+    setPlaylist(state, payload) {
+      state.myTunes = payload;
     }
   },
   actions: {
-    getMusicByArtist({commit, dispatch}, artist) {
-      var url = '//bcw-getter.herokuapp.com/?url=';
-      var url2 = 'https://itunes.apple.com/search?term=' + artist;
-      var apiUrl = url + encodeURIComponent(url2);
-      $.get(apiUrl).then(data=>{
-        commit('setResults', data)
+    getMusicByArtist({ commit, dispatch }, payload) {
+      music.get(payload).then(res => {
+        commit('setResults', res.data.results)
+      })
+        .catch(err => {
+          console.error(err)
+        })
+    },
+    //this should send a get request to your server to return the list of saved tunes
+    getMyTunes({ commit, dispatch }) {
+      api.get('mytunes/playlist').then(results => {
+        commit('setPlaylist', results.data)
       })
     },
-    getMyTunes({commit, dispatch}){
-      //this should send a get request to your server to return the list of saved tunes
+    //this will post to your server adding a new track to your tunes
+    addToMyTunes({ commit, dispatch }, payload) {
+      api.post('mytunes/playlist', payload).then(results => {
+        commit('setMyTunes', results.data)
+      })
     },
-    addToMyTunes({commit, dispatch}, track){
-      //this will post to your server adding a new track to your tunes
+    //Removes track from the database with delete
+    removeTrack({ commit, dispatch }, track) {
     },
-    removeTrack({commit, dispatch}, track){
-      //Removes track from the database with delete
+    //this should increase the position / upvotes and downvotes on the track
+    promoteTrack({ commit, dispatch }, payload) {
+      api.put('/api/myTunes/playlist/', payload).then(result => {
+        commit('updatePlaylist', result.data)
+      })
     },
-    promoteTrack({commit, dispatch}, track){
-      //this should increase the position / upvotes and downvotes on the track
+    //this should decrease the position / upvotes and downvotes on the track
+    demoteTrack({ commit, dispatch }, payload) {
+      api.put('/api/myTunes/playlist/', payload).then(result =>{
+        commit('updatePlaylist', result.data)
+      })
     },
-    demoteTrack({commit, dispatch}, track){
-      //this should decrease the position / upvotes and downvotes on the track
+    login({ commit, dispatch }, payload) {
+      api.post('user/login', payload).then(res => {
+        commit('updateUser', res.data.user)
+        router.push({ name: 'Home' })
+      })
+        .catch(err => {
+          console.log('Invalid Information')
+        })
+    },
+    createUser({ commit, dispatch }, payload) {
+      api.post('user/register', payload).then(res => {
+        commit('updateUser', res.data.user)
+        router.push({ name: 'Home' })
+      })
+        .catch(err => {
+          console.log('Invalid Information')
+        })
+    },
+    authenticate({ commit, dispatch }, payload) {
+      api.get('user/authenticate').then(res => {
+        commit('updateUser', res.data)
+        router.push({ name: 'Home' })
+      })
+        .catch(err => {
+          console.log('Error Authenticating User');
+          router.push({ name: 'Login' })
+        })
+    },
+    logout({ commit, dispatch }, payload) {
+      api.delete('user/logout').then(res => {
+        commit('updateUser', {})
+      })
     }
 
   }
-})
+});
 
-export default store
+export default store;

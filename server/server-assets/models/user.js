@@ -6,7 +6,7 @@ var SALT_FACTOR = 13;
 
 var schema = new Schema({
     email: {type: String, required: true, unique: true, lowercase: true},
-    password: {type: String, required: true, minlength: 10},
+    password: {type: String, required: true},
     created: {type: Date, required: true, default: Date.now()}
 });
 
