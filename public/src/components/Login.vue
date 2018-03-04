@@ -28,11 +28,19 @@
             login() {
                 this.$store.dispatch("login", this.user)
             },
-            createUser(){
+            createUser() {
                 this.$store.dispatch('createUser', this.createdUser)
             }
         }
     }
 </script>
-<style>
+<style scoped>
+    * {
+        background: url('https://images.pexels.com/photos/172289/pexels-photo-172289.jpeg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        color: white;
+    }
 </style>

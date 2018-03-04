@@ -26,7 +26,7 @@
   import MyTunes from './MyTunes.vue'
   export default {
     name: 'home',
-    mounted(){
+    mounted() {
       this.$store.dispatch('getMyTunes')
     },
     data() {
@@ -50,12 +50,21 @@
 </script>
 
 
-<style>
+<style scoped>
   .my-tunes {
-    background: lightblue;
+    background: rgba(173, 216, 230, 0.5);
   }
 
   .itunes {
-    background: gray;
+    background: rgba(128, 128, 128, 0.5);
+  }
+
+  * {
+    background: url('https://images.pexels.com/photos/5156/people-eiffel-tower-lights-night.jpg?w=940&h=650&dpr=2&auto=compress&cs=tinysrgb') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    color: white;
   }
 </style>

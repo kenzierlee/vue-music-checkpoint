@@ -17,7 +17,7 @@
                             <b>Album: </b> {{result.collectionName}}</h5>
                         <h5>
                             <b>Title: </b>{{result.trackName}} ${{result.trackPrice}}</h5>
-                            <audio controls><source :src="result.previewURL"></audio>
+                            <audio controls><source :src="result.previewUrl" type="audio/mp4"></audio>
                     </div>
                 </div>
             </div>
@@ -47,7 +47,7 @@
 
 </script>
 
-<style>
+<style scoped>
     .flexor {
         display: flex;
         margin-bottom: 1rem;

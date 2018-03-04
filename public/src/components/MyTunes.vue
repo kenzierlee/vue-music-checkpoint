@@ -58,7 +58,7 @@
 
 </script>
 
-<style>
+<style scoped>
     /* .border-grey {
         border: .1rem solid #eee;
     } */

@@ -53,8 +53,8 @@ var store = new vuex.Store({
         })
     },
     //this should send a get request to your server to return the list of saved tunes
-    getMyTunes({ commit, dispatch }) {
-      api.get('mytunes/playlist').then(results => {
+    getMyTunes({ commit, dispatch }, payload) {
+      api.get('mytunes/playlist', payload).then(results => {
         commit('setPlaylist', results.data)
       })
     },
@@ -65,11 +65,14 @@ var store = new vuex.Store({
       })
     },
     //Removes track from the database with delete
-    removeTrack({ commit, dispatch }, track) {
+    removeTrack({ commit, dispatch }, payload) {
+      api.delete('mytunes/playlist/', payload).then(results =>{
+        commit('updatePlaylist', results.data)
+      })
     },
     //this should increase the position / upvotes and downvotes on the track
     promoteTrack({ commit, dispatch }, payload) {
-      api.put('/api/myTunes/playlist/'+ payload._id).then(result => {
+      api.put('/api/myTunes/playlist/', payload).then(result => {
         commit('updatePlaylist', result.data)
       })
     },
