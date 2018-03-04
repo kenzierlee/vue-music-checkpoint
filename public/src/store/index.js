@@ -35,7 +35,7 @@ var store = new vuex.Store({
     },
     updatePlaylist(state, payload) {
       payload.sort(function (a, b) {
-        return b.like - a.like;
+        return b.count - a.count;
       })
       state.myTunes = payload
     },
@@ -69,7 +69,7 @@ var store = new vuex.Store({
     },
     //this should increase the position / upvotes and downvotes on the track
     promoteTrack({ commit, dispatch }, payload) {
-      api.put('/api/myTunes/playlist/', payload).then(result => {
+      api.put('/api/myTunes/playlist/'+ payload._id).then(result => {
         commit('updatePlaylist', result.data)
       })
     },
