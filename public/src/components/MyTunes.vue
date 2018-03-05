@@ -1,44 +1,49 @@
 <template>
-        <div class="myTunes">
-            <h1>myTunes</h1>
-            <div class="playlist-results">
-                <div v-for='myTune in myTunes'>
-                    <div class="flexor border-grey">
-                        <div class="mar-right">
-                            <img v-bind:src="myTune.artworkUrl100">
-                            <div class="margin-top">
-                                <button @click='promoteTrack(myTune)' class='btn'><i class="fas fa-arrow-circle-up"></i></button>
-                                <button @click='demoteTrack(myTune)' class='btn'><i class="fas fa-arrow-circle-down"></i></button>
-                            </div>
+    <div class="myTunes">
+        <h1>myTunes</h1>
+        <div class="playlist-results">
+            <div v-for='myTune in myTunes'>
+                <div class="flexor border-grey">
+                    <div class="mar-right">
+                        <img v-bind:src="myTune.artworkUrl100">
+                        <div class="margin-top">
+                            <button @click='promoteTrack(myTune)' class='btn'>
+                                <i class="fas fa-arrow-circle-up"></i>
+                            </button>
+                            <button @click='demoteTrack(myTune)' class='btn'>
+                                <i class="fas fa-arrow-circle-down"></i>
+                            </button>
                         </div>
-                        <div class="playlist-info">
-                                <i @click="removeTrack(myTune)" class="mar-left fas fa-times-circle"></i>
-                            <h4>
-                                <b>Artist: </b> {{myTune.artistName}}</h4>
-                            <h5>
-                                <b>Album: </b> {{myTune.collectionName}}</h5>
-                            <h5>
-                                <b>Title: </b>{{myTune.trackName}} ${{myTune.trackPrice}}</h5>
-                                <audio controls><source :src="myTune.previewUrl"></audio>
-                        </div>
+                    </div>
+                    <div class="playlist-info">
+                        <i @click="removeTrack(myTune)" class="mar-left fas fa-times-circle"></i>
+                        <h4>
+                            <b>Artist: </b> {{myTune.artistName}}</h4>
+                        <h5>
+                            <b>Album: </b> {{myTune.collectionName}}</h5>
+                        <h5>
+                            <b>Title: </b>{{myTune.trackName}} ${{myTune.trackPrice}}</h5>
+                        <audio controls>
+                            <source :src="myTune.previewUrl">
+                        </audio>
                     </div>
                 </div>
             </div>
         </div>
-    </template>
+    </div>
+</template>
 
 <script>
     export default {
         name: 'My-Tunes',
-        props: ['result'],
         methods: {
-            promoteTrack(myTune){
+            promoteTrack(myTune) {
                 this.$store.dispatch('promoteTrack', myTune)
             },
-            demoteTrack(myTune){
+            demoteTrack(myTune) {
                 this.$store.dispatch('demoteTrack', myTune)
             },
-            removeTrack(myTune){
+            removeTrack(myTune) {
                 this.$store.dispatch('removeTrack', myTune)
             }
         },
@@ -55,7 +60,6 @@
 </script>
 
 <style scoped>
-
     .flexor {
         display: flex;
         margin-bottom: 1rem;

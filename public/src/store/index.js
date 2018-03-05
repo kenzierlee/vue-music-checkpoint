@@ -50,23 +50,21 @@ var store = new vuex.Store({
         })
     },
     //this should send a get request to your server to return the list of saved tunes
-    getMyTunes({ commit, dispatch }) {
-      api.get('mytunes/' + store.state.user + '/playlist').then(res => {
+    getMyTunes({ commit, dispatch }, payload) {
+      api.get('mytunes/' + payload._id + '/playlist').then(res => {
         commit('setPlaylist', res.data)
       })
     },
     //this will post to your server adding a new track to your tunes
     addToMyTunes({ commit, dispatch }, payload) {
-      debugger
       api.post('mytunes/' + payload.userId + '/playlist', payload).then(res => {
         commit('addToMyTunes', res.data)
       })
     },
     //Removes track from the database with delete
     removeTrack({ commit, dispatch }, payload) {
-      debugger
-      api.delete('mytunes/' + payload.userId + '/playlist/' + payload._id, payload).then(res => {
-        dispatch('getMyTunes', res.data)
+      api.delete('mytunes/' + payload.userId + '/playlist/' + payload._id).then(res => {
+        dispatch('getMyTunes', {_id: payload.userId})
       })
     },
     //this should increase the position / upvotes and downvotes on the track
@@ -79,7 +77,6 @@ var store = new vuex.Store({
     //this should decrease the position / upvotes and downvotes on the track
     demoteTrack({ commit, dispatch }, payload) {
       payload.count--
-      debugger
       api.put('myTunes/'+ payload.userId +'/playlist/'+ payload._id, payload).then(res => {
         dispatch('getMyTunes', res.data)
       })
@@ -107,8 +104,9 @@ var store = new vuex.Store({
     //authenticates users so they dont have to login each time, redirects user to the proper page 
     //depending on users session id
     authenticate({ commit, dispatch }, payload) {
-      api.get('user/authenticate').then(res => {
-        commit('updateUser', res.data)
+      api.get('user/authenticate', payload).then(res => {
+        commit('updateUser', res.data);
+        dispatch('getMyTunes', res.data)
         router.push({ name: 'Home' })
       })
         .catch(err => {

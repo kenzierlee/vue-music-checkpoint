@@ -4,7 +4,6 @@ var Users = require('../models/user');
 
 //gets all of your songs in the users playlist
 router.get('/api/mytunes/:userId/playlist', (req, res, next) => {
-    req.params.userId = req.params._id
     Playlists.find({ 'userId': req.params.userId }).then(playlists => {
         if (!playlists) {
             res.status(400).send({ error: 'No Playlist Available' })
@@ -16,6 +15,8 @@ router.get('/api/mytunes/:userId/playlist', (req, res, next) => {
 
 //this creates/adds to your playlist
 router.post('/api/mytunes/:userId/playlist', (req, res, next) => {
+    var playlist = req.body
+    playlist.userId = req.session.uid
     Playlists.create(req.body).then(playlist => {
         return res.send(playlist)
     })

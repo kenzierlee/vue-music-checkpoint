@@ -19,7 +19,7 @@
           <itunes class="itunes"></itunes>
         </div>
         <div class="col-md-6">
-          <my-tunes class="my-tunes"></my-tunes>
+          <my-tunes :user='user'class="my-tunes"></my-tunes>
         </div>
       </div>
     </div>
@@ -32,9 +32,6 @@
   import MyTunes from './MyTunes.vue'
   export default {
     name: 'home',
-    mounted() {
-      this.$store.dispatch('getMyTunes')
-    },
     data() {
       return {
         artist: ''
