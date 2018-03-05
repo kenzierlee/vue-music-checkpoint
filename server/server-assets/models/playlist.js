@@ -11,7 +11,7 @@ var schema = new Schema({
     collectionName: {type: String, required: true},
     previewUrl: {type: String},
     count: {type: Number, required: true, default: 0},
-    userId: {type: ObjectId, ref: 'User'}
+    userId: {type: ObjectId, ref: 'User', required: true}
 });
 
 module.exports = mongoose.model(schemaName, schema);

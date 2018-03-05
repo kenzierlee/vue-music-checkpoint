@@ -43,16 +43,12 @@
                 this.$store.dispatch('demoteTrack', myTune)
             },
             removeTrack(myTune){
-                myTune.userId = this.user._id
                 this.$store.dispatch('removeTrack', myTune)
             }
         },
         computed: {
             myTunes() {
                 return this.$store.state.myTunes
-            },
-            user(){
-                return this.$store.state.user
             }
         },
     }

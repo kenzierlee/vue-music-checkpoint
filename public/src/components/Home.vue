@@ -2,14 +2,14 @@
   <div class="home">
     <nav class="navbar navbar-light bg-light">
       <span class="navbar-brand mb-0 h1">
-        <i class="fas fa-music"></i>
+        <i class="fas fa-music fa-2x"></i>
       </span>
       <h1>Vue Music</h1>
       <form @submit.prevent='artistSearch'>
         <input type='text' v-model='artist' placeholder='Search By Artist'>
         <button type='submit' class="btn btn-large">Search</button>
       </form>
-      <button type="button" @click.prevent="logout" class="btn btn-lg">
+      <button type="button" @click.prevent="logout(user)" class="btn btn-lg">
         <b>logout</b>
       </button>
     </nav>
@@ -30,6 +30,7 @@
 <script>
   import itunes from './Itunes.vue'
   import MyTunes from './MyTunes.vue'
+  import login from './Login.vue'
   export default {
     name: 'home',
     mounted() {
@@ -46,6 +47,11 @@
       },
       logout() {
         this.$store.dispatch('logout')
+      }
+    },
+    computed: {
+      user() {
+        return this.$store.state.user
       }
     },
     components: {

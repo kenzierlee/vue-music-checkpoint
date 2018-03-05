@@ -33,12 +33,6 @@ var store = new vuex.Store({
     updateUser(state, payload) {
       state.user = payload;
     },
-    updatePlaylist(state, results) {
-      results.sort(function (a, b) {
-        return b.count - a.count;
-      })
-      state.myTunes = results
-    },
     setPlaylist(state, payload) {
       state.myTunes = payload;
     }
@@ -54,8 +48,11 @@ var store = new vuex.Store({
     },
     //this should send a get request to your server to return the list of saved tunes
     getMyTunes({ commit, dispatch }, payload) {
-      api.get('mytunes/' + payload + '/playlist').then(results => {
-        commit('setPlaylist', results.data)
+      api.get('mytunes/' + store.state.user._id + '/playlist').then(results => {
+        var sort = results.data.sort((a,b)=>{
+          return b.count - a.count;
+        })
+        commit('setPlaylist', sort)
       })
     },
     //this will post to your server adding a new track to your tunes
@@ -73,13 +70,13 @@ var store = new vuex.Store({
     //this should increase the position / upvotes and downvotes on the track
     promoteTrack({ commit, dispatch }, payload) {
       api.put('myTunes/'+ payload.userId +'/playlist/'+ payload._id, payload).then(result => {
-        commit('updatePlaylist', result.data)
+        dispatch('getMyTunes', result.data)
       })
     },
     //this should decrease the position / upvotes and downvotes on the track
     demoteTrack({ commit, dispatch }, payload) {
       api.put('myTunes/'+ payload.userId +'/playlist/'+ payload._id, payload).then(result => {
-        commit('updatePlaylist', result.data)
+        dispatch('getMyTunes', result.data)
       })
     },
     login({ commit, dispatch }, payload) {
@@ -111,8 +108,9 @@ var store = new vuex.Store({
         })
     },
     logout({ commit, dispatch }, payload) {
-      api.delete('logout').then(res => {
+      api.delete('user/logout').then(res => {
         commit('updateUser', {})
+        dispatch('authenticate', payload)
       })
     }
 
