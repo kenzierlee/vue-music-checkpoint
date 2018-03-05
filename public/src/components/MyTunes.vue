@@ -19,7 +19,7 @@
                                 <b>Album: </b> {{myTune.collectionName}}</h5>
                             <h5>
                                 <b>Title: </b>{{myTune.trackName}} ${{myTune.trackPrice}}</h5>
-                                <audio controls><source :src="myTune.previewURL"></audio>
+                                <audio controls><source :src="myTune.previewUrl"></audio>
                         </div>
                     </div>
                 </div>
@@ -31,27 +31,28 @@
     export default {
         name: 'My-Tunes',
         props: ['result'],
-        data() {
-            return {
-
-            }
-        },
         methods: {
             promoteTrack(myTune){
+                myTune.userId = this.user._id
                 myTune.count++
                 this.$store.dispatch('promoteTrack', myTune)
             },
             demoteTrack(myTune){
+                myTune.userId = this.user._id
                 myTune.count--
                 this.$store.dispatch('demoteTrack', myTune)
             },
             removeTrack(myTune){
+                myTune.userId = this.user._id
                 this.$store.dispatch('removeTrack', myTune)
             }
         },
         computed: {
             myTunes() {
                 return this.$store.state.myTunes
+            },
+            user(){
+                return this.$store.state.user
             }
         },
     }

@@ -33,6 +33,9 @@
         computed: {
             results() {
                 return this.$store.state.results
+            },
+            user(){
+                return this.$store.state.user
             }
         },
         methods: {

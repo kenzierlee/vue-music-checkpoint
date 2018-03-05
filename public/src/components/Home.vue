@@ -1,11 +1,17 @@
 <template>
   <div class="home">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-light bg-light">
+      <span class="navbar-brand mb-0 h1">
+        <i class="fas fa-music"></i>
+      </span>
       <h1>Vue Music</h1>
-      <form class='col-sm-12' @submit.prevent='artistSearch'>
+      <form @submit.prevent='artistSearch'>
         <input type='text' v-model='artist' placeholder='Search By Artist'>
         <button type='submit' class="btn btn-large">Search</button>
       </form>
+      <button type="button" @click.prevent="logout" class="btn btn-lg">
+        <b>logout</b>
+      </button>
     </nav>
     <div class="container-fluid">
       <div class="row">
@@ -37,10 +43,10 @@
     methods: {
       artistSearch() {
         this.$store.dispatch('getMusicByArtist', this.artist)
+      },
+      logout() {
+        this.$store.dispatch('logout')
       }
-    },
-    computed: {
-
     },
     components: {
       itunes,
@@ -57,6 +63,11 @@
 
   .itunes {
     background: rgba(128, 128, 128, 0.5);
+  }
+
+  *nav {
+    display: inline-block;
+    justify-content: center;
   }
 
   * {

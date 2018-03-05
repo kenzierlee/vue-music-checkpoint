@@ -9,7 +9,7 @@ var schema = new Schema({
     trackName: {type: String, required: true},
     trackPrice: {type: String, required: true},
     collectionName: {type: String, required: true},
-    previewUrl: {type: String, required: true},
+    previewUrl: {type: String},
     count: {type: Number, required: true, default: 0},
     userId: {type: ObjectId, ref: 'User'}
 });
