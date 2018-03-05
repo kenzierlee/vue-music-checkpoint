@@ -50,30 +50,30 @@ var store = new vuex.Store({
         })
     },
     //this should send a get request to your server to return the list of saved tunes
-    getMyTunes({ commit, dispatch }, payload) {
-      api.get('mytunes/' + payload._id + '/playlist').then(res => {
-        commit('setPlaylist', res)
+    getMyTunes({ commit, dispatch }) {
+      api.get('mytunes/' + store.state.user + '/playlist').then(res => {
+        commit('setPlaylist', res.data)
       })
     },
     //this will post to your server adding a new track to your tunes
     addToMyTunes({ commit, dispatch }, payload) {
       debugger
       api.post('mytunes/' + payload.userId + '/playlist', payload).then(res => {
-        dispatch('addToMyTunes', res.data)
+        commit('addToMyTunes', res.data)
       })
     },
     //Removes track from the database with delete
     removeTrack({ commit, dispatch }, payload) {
       debugger
       api.delete('mytunes/' + payload.userId + '/playlist/' + payload._id, payload).then(res => {
-        dispatch('getMyTunes', res)
+        dispatch('getMyTunes', res.data)
       })
     },
     //this should increase the position / upvotes and downvotes on the track
     promoteTrack({ commit, dispatch }, payload) {
       payload.count++
       api.put('myTunes/'+ payload.userId +'/playlist/'+ payload._id, payload).then(res => {
-        dispatch('getMyTunes', res)
+        dispatch('getMyTunes', res.data)
       })
     },
     //this should decrease the position / upvotes and downvotes on the track
@@ -81,7 +81,7 @@ var store = new vuex.Store({
       payload.count--
       debugger
       api.put('myTunes/'+ payload.userId +'/playlist/'+ payload._id, payload).then(res => {
-        dispatch('getMyTunes', res)
+        dispatch('getMyTunes', res.data)
       })
     },
     //logs user in and redirects them to the home page

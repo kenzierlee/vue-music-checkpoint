@@ -9,7 +9,7 @@ router.get('/api/mytunes/:userId/playlist', (req, res, next) => {
         if (!playlists) {
             res.status(400).send({ error: 'No Playlist Available' })
         }
-        res.send(playlists)
+        return res.send(playlists)
     })
         .catch(next)
 });
@@ -17,7 +17,7 @@ router.get('/api/mytunes/:userId/playlist', (req, res, next) => {
 //this creates/adds to your playlist
 router.post('/api/mytunes/:userId/playlist', (req, res, next) => {
     Playlists.create(req.body).then(playlist => {
-        res.send(playlist)
+        return res.send(playlist)
     })
         .catch(next)
 });
