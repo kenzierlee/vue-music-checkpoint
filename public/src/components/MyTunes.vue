@@ -33,13 +33,9 @@
         props: ['result'],
         methods: {
             promoteTrack(myTune){
-                myTune.userId = this.user._id
-                myTune.count++
                 this.$store.dispatch('promoteTrack', myTune)
             },
             demoteTrack(myTune){
-                myTune.userId = this.user._id
-                myTune.count--
                 this.$store.dispatch('demoteTrack', myTune)
             },
             removeTrack(myTune){
@@ -56,9 +52,6 @@
 </script>
 
 <style scoped>
-    /* .border-grey {
-        border: .1rem solid #eee;
-    } */
 
     .flexor {
         display: flex;
@@ -76,11 +69,11 @@
 
     img {
         margin-bottom: .5rem;
-        margin-left: 2.75rem;
+        margin-left: 2.25rem;
     }
 
     button {
-        margin-left: 1rem;
+        margin-left: 1.25rem;
     }
 
     h1 {

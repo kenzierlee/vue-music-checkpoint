@@ -40,6 +40,7 @@
         },
         methods: {
             addTrack(result) {
+                result.userId = this.user._id
                 this.$store.dispatch('addToMyTunes', result)
             }
         },

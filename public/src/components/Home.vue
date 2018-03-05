@@ -30,7 +30,6 @@
 <script>
   import itunes from './Itunes.vue'
   import MyTunes from './MyTunes.vue'
-  import login from './Login.vue'
   export default {
     name: 'home',
     mounted() {

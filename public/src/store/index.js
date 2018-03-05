@@ -27,14 +27,14 @@ var store = new vuex.Store({
     setResults(state, results) {
       state.results = results;
     },
-    setMyTunes(state, payload) {
-      state.myTunes.unshift(payload)
-    },
     updateUser(state, payload) {
       state.user = payload;
     },
     setPlaylist(state, payload) {
-      state.myTunes = payload;
+      payload.sort(function (a,b){
+        return b.count - a.count;
+      })
+      state.myTunes = payload
     }
   },
   actions: {
@@ -47,36 +47,38 @@ var store = new vuex.Store({
         })
     },
     //this should send a get request to your server to return the list of saved tunes
-    getMyTunes({ commit, dispatch }, payload) {
-      api.get('mytunes/' + store.state.user._id + '/playlist').then(results => {
-        var sort = results.data.sort((a,b)=>{
-          return b.count - a.count;
-        })
-        commit('setPlaylist', sort)
+    getMyTunes({ commit, dispatch }) {
+      api.get('mytunes/' + store.state.user + '/playlist').then(res => {
+        commit('setPlaylist', res.data)
       })
     },
     //this will post to your server adding a new track to your tunes
     addToMyTunes({ commit, dispatch }, payload) {
-      api.post('mytunes/' + payload.userId + '/playlist', payload).then(results => {
-        commit('setMyTunes', results.data)
+      debugger
+      api.post('mytunes/' + payload.userId + '/playlist', payload).then(res => {
+        dispatch('getMyTunes', res)
       })
     },
     //Removes track from the database with delete
     removeTrack({ commit, dispatch }, payload) {
-      api.delete('mytunes/' + payload.userId + 'playlist/' + payload._id, payload).then(res => {
+      debugger
+      api.delete('mytunes/' + payload.userId + '/playlist/' + payload._id, payload).then(res => {
         dispatch('getMyTunes', res)
       })
     },
     //this should increase the position / upvotes and downvotes on the track
     promoteTrack({ commit, dispatch }, payload) {
-      api.put('myTunes/'+ payload.userId +'/playlist/'+ payload._id, payload).then(result => {
-        dispatch('getMyTunes', result.data)
+      payload.count++
+      api.put('myTunes/'+ payload.userId +'/playlist/'+ payload._id, payload).then(res => {
+        dispatch('getMyTunes', res)
       })
     },
     //this should decrease the position / upvotes and downvotes on the track
     demoteTrack({ commit, dispatch }, payload) {
-      api.put('myTunes/'+ payload.userId +'/playlist/'+ payload._id, payload).then(result => {
-        dispatch('getMyTunes', result.data)
+      payload.count--
+      debugger
+      api.put('myTunes/'+ payload.userId +'/playlist/'+ payload._id, payload).then(res => {
+        dispatch('getMyTunes', res)
       })
     },
     login({ commit, dispatch }, payload) {
