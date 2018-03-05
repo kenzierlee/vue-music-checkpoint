@@ -35,6 +35,9 @@ var store = new vuex.Store({
         return b.count - a.count;
       })
       state.myTunes = payload
+    },
+    addToMyTunes(state, payload){
+      state.myTunes.push(payload)
     }
   },
   actions: {
@@ -47,16 +50,16 @@ var store = new vuex.Store({
         })
     },
     //this should send a get request to your server to return the list of saved tunes
-    getMyTunes({ commit, dispatch }) {
-      api.get('mytunes/' + store.state.user + '/playlist').then(res => {
-        commit('setPlaylist', res.data)
+    getMyTunes({ commit, dispatch }, payload) {
+      api.get('mytunes/' + payload._id + '/playlist').then(res => {
+        commit('setPlaylist', res)
       })
     },
     //this will post to your server adding a new track to your tunes
     addToMyTunes({ commit, dispatch }, payload) {
       debugger
       api.post('mytunes/' + payload.userId + '/playlist', payload).then(res => {
-        dispatch('getMyTunes', res)
+        dispatch('addToMyTunes', res.data)
       })
     },
     //Removes track from the database with delete
@@ -81,6 +84,7 @@ var store = new vuex.Store({
         dispatch('getMyTunes', res)
       })
     },
+    //logs user in and redirects them to the home page
     login({ commit, dispatch }, payload) {
       api.post('user/login', payload).then(res => {
         commit('updateUser', res.data.user)
@@ -90,6 +94,7 @@ var store = new vuex.Store({
           console.log('Invalid Information')
         })
     },
+    //this creates a user and also redirects them to the home page w/out having to login 
     createUser({ commit, dispatch }, payload) {
       api.post('user/register', payload).then(res => {
         commit('updateUser', res.data.user)
@@ -99,6 +104,8 @@ var store = new vuex.Store({
           console.log('Invalid Information')
         })
     },
+    //authenticates users so they dont have to login each time, redirects user to the proper page 
+    //depending on users session id
     authenticate({ commit, dispatch }, payload) {
       api.get('user/authenticate').then(res => {
         commit('updateUser', res.data)
@@ -109,6 +116,7 @@ var store = new vuex.Store({
           router.push({ name: 'Login' })
         })
     },
+    //will clear session id causing the user to logout
     logout({ commit, dispatch }, payload) {
       api.delete('user/logout').then(res => {
         commit('updateUser', {})

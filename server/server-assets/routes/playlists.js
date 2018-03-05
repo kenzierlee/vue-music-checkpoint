@@ -2,24 +2,22 @@ var router = require('express').Router();
 var Playlists = require('../models/playlist');
 var Users = require('../models/user');
 
-//gets all of your songs in your playlist
+//gets all of your songs in the users playlist
 router.get('/api/mytunes/:userId/playlist', (req, res, next) => {
     req.params.userId = req.params._id
-        Playlists.find({ userId : req.params.userId }).then(playlists => {
-            res.send(playlists)
-        })
+    Playlists.find({ 'userId': req.params.userId }).then(playlists => {
+        if (!playlists) {
+            res.status(400).send({ error: 'No Playlist Available' })
+        }
+        res.send(playlists)
+    })
         .catch(next)
 });
 
 //this creates/adds to your playlist
 router.post('/api/mytunes/:userId/playlist', (req, res, next) => {
-    req.params.userId = req.params._id
-    Users.findById(req.params.userId).then(user => {
-        req.body.userId = req.session.uid
-        Playlists.create(req.body).then(playlist => {
-            res.send(playlist)
-        })
-            .catch(next)
+    Playlists.create(req.body).then(playlist => {
+        res.send(playlist)
     })
         .catch(next)
 });

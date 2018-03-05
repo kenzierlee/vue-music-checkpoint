@@ -45,6 +45,9 @@
         computed: {
             myTunes() {
                 return this.$store.state.myTunes
+            },
+            user(){
+                return this.$store.state.user
             }
         },
     }
